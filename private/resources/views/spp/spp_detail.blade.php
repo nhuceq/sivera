@@ -33,29 +33,6 @@ Detail SPP
 						<label>Tanggal Dokumen</label> <span>: {{ $data_spp->tgl_dok_spp }}</span>
 					</li>	
 
-
-					<li class="list-group-item">
-						<label>Mekanisme Cair</label>: 
-						@if ( $data_spp->mekanisme_cair == 1 )
-						LS 
-						@elseif ( $data_spp->mekanisme_cair == 2 )	
-						UP 	
-						@elseif ( $data_spp->mekanisme_cair == 3 )	
-						GUP 	
-						@else
-						PTUP 	
-						@endif							
-					</li>
-
-					<li class="list-group-item">
-						<label>Penerima Hak</label>:  
-						@if ( $data_spp->penerima_hak == 1 )
-						Bendahara Pengeluaran
-						@else
-						Pihak Ketiga
-						@endif		 		
-					</li>
-
 					<li class="list-group-item">
 						<label>Keterangan SPP</label> <span>: {{ $data_spp->ket_spp }}</span>
 					</li>

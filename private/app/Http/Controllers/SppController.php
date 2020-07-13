@@ -353,8 +353,6 @@ class SppController extends Controller
 
 		$nomor_spp = $data_spp ['nomor_spp'];
 		$tgl_dok = $data_spp ['tgl_dok'];
-		$mekanisme_cair = $data_spp ['mekanisme'];
-		$penerima_hak = $data_spp ['penerima'];
 		$ket_spp = $data_spp ['ket_spp'];
 		$pj = $data_spp ['pj'];
 		$jenis_belanja = $data_spp ['jenis_belanja'];
@@ -366,8 +364,6 @@ class SppController extends Controller
 		$data_save = [
 			'nomor_spp' => $nomor_spp,
 			'tgl_dok_spp' => $tgl_dok,
-			'mekanisme_cair' => $mekanisme_cair,
-			'penerima_hak' => $penerima_hak,
 			'ket_spp' => $ket_spp,
 			'pj' => $pj,
 			'jenis_belanja' => $jenis_belanja,
@@ -409,8 +405,6 @@ class SppController extends Controller
 
 		$nomor_spp = $data_spp ['nomor_spp'];		
 		$tgl_dok = $data_spp ['tgl_dok'];
-		$mekanisme_cair = $data_spp ['mekanisme'];
-		$penerima_hak = $data_spp ['penerima'];
 		$ket_spp = $data_spp ['ket_spp'];
 		$pj = $data_spp ['pj'];
 		$jenis_belanja = $data_spp ['jenis_belanja'];
@@ -424,8 +418,6 @@ class SppController extends Controller
 		$data_edit = [
 			'nomor_spp' => $nomor_spp,
 			'tgl_dok_spp' => $tgl_dok,
-			'mekanisme_cair' => $mekanisme_cair,
-			'penerima_hak' => $penerima_hak,
 			'ket_spp' => $ket_spp,
 			'pj' => $pj,
 			'jenis_belanja' => $jenis_belanja,
