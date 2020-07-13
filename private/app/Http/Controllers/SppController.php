@@ -103,7 +103,7 @@ class SppController extends Controller
 		$spp = DB::table('tb_spp')
 		-> select('tb_spp.*', 'tb_user.username as loket_nama')
 		-> leftJoin('tb_user', 'tb_spp.kode_user_loket','=', 'tb_user.id')
-		-> where ('nomor_spp', 'LIKE', '%' .$text. '%')
+		-> whereRaw('( nomor_spp LIKE ? OR id_spp LIKE ? )', ['%' .$text. '%', '%' .$text. '%'])
 		-> orderBy('id_spp', 'desc')
 		-> paginate(10);
 

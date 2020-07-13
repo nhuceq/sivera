@@ -16,6 +16,10 @@ Detail SPP
 				<h3>Detail SPP</h3>   
 				<ul class="list-group list-group-flush detail-spp">
 					<li class="list-group-item">
+						<label>Nomor Pengajuan </label>
+						<span>: {{ $data_spp->id_spp }}</span>
+					</li>
+					<li class="list-group-item">
 						<label>Nomor SPP </label> <span>: {{ $data_spp->nomor_spp }}
 						</span>
 					</li>
@@ -224,7 +228,7 @@ Detail SPP
 								<div class="col-md-4">
 									<div class="form-group col-md">
 										<label>Nomor Pengajuan</label>
-										<input type="text" class="form-control" placeholder="" name="nomor_pengajuan" disabled="">
+										<input type="text" class="form-control" placeholder="" name="nomor_pengajuan" disabled="" value ="{{ $data_spp -> id_spp }}">
 									</div>
 									<div class="form-group col-md">
 										<label>Nomor SPP</label>

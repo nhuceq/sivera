@@ -74,7 +74,7 @@ Daftar SPP
 					<div class="col-md-6">
 						<div class="form-group col-md">
 							<label>Nomor Pengajuan</label>
-							<input type="text" class="form-control" placeholder="" name="nomor_pengajuan" required>
+							<input type="text" class="form-control" placeholder="Auto Generate" name="nomor_pengajuan" readonly>
 						</div>
 						<div class="form-group col-md">
 							<label>Nomor SPP</label>
@@ -230,6 +230,7 @@ Daftar SPP
 		<tr>
 			<center>
 				<th>No.</th>
+				<th>No. Pengajuan</th>
 				<th>No. SPP</th>
 				<!-- <th>Nama Petugas</th> -->
 				<th>Tgl SPP</th>
@@ -255,6 +256,7 @@ Daftar SPP
 
 		<tr>
 			<td>{{ $i }}</td>
+			<td>{{ $spp -> id_spp }}</td>
 			<td>{{ $spp -> nomor_spp }}</td>
 			<!-- <td>{{ $spp -> loket_nama }}</td> -->
 			<td>{{ $spp -> tgl_dok_spp }}</td>
