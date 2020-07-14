@@ -111,7 +111,10 @@ class SppController extends Controller
 		->groupBy('sifat_bayar')
 		->get();
 
-		return view ('spp.list_spp', ['data_spp' => $spp, ])->with('sifat_bayar_list', $sifat_bayar_list);;	
+		$user_id_pj = Auth::user()->id_pj;
+		$pj = DB::table('penanggung_jawab')->where('id', $user_id_pj)->first();
+
+		return view ('spp.list_spp', ['data_spp' => $spp, 'pj' => $pj ])->with('sifat_bayar_list', $sifat_bayar_list);;	
 
 		
 		// return view('spp.list_spp')
@@ -311,6 +314,13 @@ class SppController extends Controller
 
 		$spp = DB::table ('tb_spp')->where('id_spp', $id_spp)->first();
 
+		$user_pj = DB::table('tb_user')
+			->select('nama_pj')
+			->leftJoin('penanggung_jawab', 'penanggung_jawab.id', '=', 'tb_user.id_pj')
+			->where('tb_user.id', $spp->kode_user_biasa)
+			->first();
+		$nama_pj = $user_pj ? $user_pj->nama_pj : '-';
+
 		$loket = DB::table('tb_user')
 		->where('tb_user.id', $spp->kode_user_loket)
 		->first();
@@ -331,6 +341,7 @@ class SppController extends Controller
 			'nama_loket' => $nama_loket,
 			'nama_ver1' => $nama_ver1,
 			'nama_ver2' => $nama_ver2,
+			'nama_pj' => $nama_pj,
 		]);
 
 	}

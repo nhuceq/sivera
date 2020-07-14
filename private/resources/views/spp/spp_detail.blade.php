@@ -38,7 +38,7 @@ Detail SPP
 					</li>
 
 					<li class="list-group-item">
-						<label>Pertanggung Jawaban</label> <span>: {{ $data_spp->pj }}</span>
+						<label>Pertanggung Jawaban</label> <span>: {{ $nama_pj }}</span>
 					</li>
 
 					<li class="list-group-item">
@@ -219,41 +219,7 @@ Detail SPP
 
 									<div class="form-group col-md">
 										<label>Pertanggung Jawaban</label>
-										<select class="form-control" name="pj" disabled>
-											<option value="Sekretariat I (Hergy Cahyono)" @if($data_spp -> pj == "Sekretariat I (Hergy Cahyono)") selected @endif>Sekretariat I (Hergy Cahyono)</option>
-
-											<option value="Sekretariat I (Digda MY Yaasin)" @if($data_spp -> pj == "Sekretariat I (Digda MY Yaasin)") selected @endif>Sekretariat I (Digda MY Yaasin)</option>
-
-											<option value="Sekretariat I (Karlina Aucia)" @if($data_spp -> pj == "Sekretariat I (Karlina Aucia)") selected @endif>Sekretariat I (Karlina Aucia)</option>
-
-											<option value="Sekretariat II (Ipin Triono)" @if($data_spp -> pj == "Sekretariat II (Ipin Triono)") selected @endif>Sekretariat II (Ipin Triono)</option>
-
-											<option value="Sekretariat III (Agung Setyawan)" @if($data_spp -> pj == "Sekretariat III (Agung Setyawan)") selected @endif >Sekretariat III (Agung Setyawan)</option>
-
-											<option value="Kedeputian I (Dody Kurniawan)" @if($data_spp -> pj == "Kedeputian I (Dody Kurniawan)") selected @endif>Kedeputian I (Dody Kurniawan)</option>
-
-											<option value="KEIN (Amar Yasir)" @if($data_spp -> pj == "KEIN (Amar Yasir)") selected @endif>KEIN (Amar Yasir)</option>
-
-											<option value="Kedeputian II (Darto)" @if($data_spp -> pj == "Kedeputian II (Darto)") selected @endif>Kedeputian II (Darto)</option>
-
-											<option value="Kedeputian III (M. Aulia P.S)" @if($data_spp -> pj == "Kedeputian III (M. Aulia P.S)") selected @endif>Kedeputian III (M. Aulia P.S)</option>
-
-											<option value="EITI (Agus Haryanto)" @if($data_spp -> pj == "EITI (Agus Haryanto)") selected @endif>EITI (Agus Haryanto)</option>
-
-											<option value="Kedeputian IV (Eko Suradi)" @if($data_spp -> pj == "Kedeputian IV (Eko Suradi)") selected @endif>Kedeputian IV (Eko Suradi)</option>
-
-											<option value="e-Commerce (Kahfi Heriyanto)" @if($data_spp -> pj == "e-Commerce (Kahfi Heriyanto)") selected @endif>e-Commerce (Kahfi Heriyanto)</option>
-
-											<option value="Kedeputian V (Lutfi Mubarok)" @if($data_spp -> pj == "Kedeputian V (Lutfi Mubarok)") selected @endif>Kedeputian V (Lutfi Mubarok)</option>
-
-											<option value="Kedeputian VI (Nurman Rudianto)" @if($data_spp -> pj == "Kedeputian VI (Nurman Rudianto)") selected @endif>Kedeputian VI (Nurman Rudianto)</option>
-
-											<option value="KPPIP (Djoko Wibowo)" @if($data_spp -> pj == "KPPIP (Djoko Wibowo)") selected @endif>KPPIP (Djoko Wibowo)</option>
-
-											<option value="Kedeputian VII (Rendyawan A)" @if($data_spp -> pj == "Kedeputian VII (Rendyawan A)") selected @endif>Kedeputian VII (Rendyawan A)</option>
-
-											<option value="KEK (Mardi Santoso)" @if($data_spp -> pj == "KEK (Mardi Santoso)") selected @endif>KEK (Mardi Santoso)</option>			
-										</select>
+										<input type="text" class="form-control" value="{{ $nama_pj }}" readonly />
 									</div>
 
 									

@@ -87,23 +87,7 @@ Daftar SPP
 						
 						<div class="form-group col-md">
 							<label>Pertanggung Jawaban</label>
-							<select class="form-control" name="pj" required>
-								<option selected>Sekretariat I (Hergy Cahyono)</option>
-								<option >Sekretariat I (Digda MY Yaasin)</option>
-								<option >Sekretariat I (Karlina Aucia)</option>
-								<option >Sekretariat II (Ipin Triono)</option>
-								<option >Sekretariat III (Iqbal Mustika Jaya)</option>
-								<option >Kedeputian I (Dody Kurniawan)</option>
-								<option >Kedeputian II (Erns Saptenno)</option>
-								<option >Kedeputian III (Iwan Niswanto)</option>
-								<option >Kedeputian IV (Ruhiyat)</option>
-								<option >e-Commerce (Edi Sugito)</option>
-								<option >Kedeputian V (Lutfi Mubarok)</option>
-								<option >Kedeputian VI (Nurman Rudianto)</option>
-								<option >KPPIP (Djoko Wibowo)</option>
-								<option >Kedeputian VII (Rendyawan A)</option>
-								<option >KEK (Mardi Santoso)</option>			
-							</select>
+							<input type="text" class="form-control" value="{{ $pj->nama_pj }}" readonly />
 						</div>
 
 						<div class="form-group col-md">
