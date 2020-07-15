@@ -314,12 +314,10 @@ class SppController extends Controller
 
 		$spp = DB::table ('tb_spp')->where('id_spp', $id_spp)->first();
 
-		$user_pj = DB::table('tb_user')
-			->select('nama_pj')
-			->leftJoin('penanggung_jawab', 'penanggung_jawab.id', '=', 'tb_user.id_pj')
-			->where('tb_user.id', $spp->kode_user_biasa)
+		$pj = DB::table('penanggung_jawab')
+			->where('id', $spp->id_pj)
 			->first();
-		$nama_pj = $user_pj ? $user_pj->nama_pj : '-';
+		$nama_pj = $pj ? $pj->nama_pj : '-';
 
 		$loket = DB::table('tb_user')
 		->where('tb_user.id', $spp->kode_user_loket)
@@ -365,33 +363,24 @@ class SppController extends Controller
 		$nomor_spp = $data_spp ['nomor_spp'];
 		$tgl_dok = $data_spp ['tgl_dok'];
 		$ket_spp = $data_spp ['ket_spp'];
-		$pj = $data_spp ['pj'];
 		$jenis_belanja = $data_spp ['jenis_belanja'];
 		$nilai_spp = $data_spp ['nilai_spp'];
 		$tgl_bapp = $data_spp ['tgl_bapp'];
-		$tgl_terima = $data_spp ['tgl_terima'];		
-		$kode_user_loket = Auth::user()->id;
+		$kode_user_biasa = Auth::user()->id;
 
 		$data_save = [
 			'nomor_spp' => $nomor_spp,
 			'tgl_dok_spp' => $tgl_dok,
 			'ket_spp' => $ket_spp,
-			'pj' => $pj,
+			'id_pj' => Auth::user()->id_pj,
 			'jenis_belanja' => $jenis_belanja,
 			'nilai_spp' => $nilai_spp,
 			'tgl_bapp' => $tgl_bapp,
-			'tgl_terima' => $tgl_terima,
 			'tgl_input' => date('y-m-d H:i:s'),
-			'kode_user_loket' => $kode_user_loket
+			'kode_user_biasa' => $kode_user_biasa
 		];
-		if ($pj == 'KEK (Mardi Santoso)') {
-			$opr = '=';
-		} else {
-			$opr = '!=';
-		}
 
-		$thisyear = date('Y');
-		$spp = DB::table('tb_spp') -> where ('nomor_spp', $nomor_spp ) -> where('pj', $opr, 'KEK (Mardi Santoso)') -> whereYear('tgl_input', $thisyear) -> first();
+		$spp = DB::table('tb_spp') -> where ('nomor_spp', $nomor_spp ) -> first();
 
 		if($spp) {
 			return redirect()->back()->with('error', 'Nomor SPP sudah ada');
