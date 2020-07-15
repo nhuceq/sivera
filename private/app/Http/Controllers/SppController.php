@@ -101,8 +101,8 @@ class SppController extends Controller
 
 
 		$spp = DB::table('tb_spp')
-		-> select('tb_spp.*', 'tb_user.username as loket_nama')
-		-> leftJoin('tb_user', 'tb_spp.kode_user_loket','=', 'tb_user.id')
+		-> select('tb_spp.*', 'penanggung_jawab.nama_pj')
+		-> leftJoin('penanggung_jawab', 'tb_spp.id_pj','=', 'penanggung_jawab.id')
 		-> whereRaw('( nomor_spp LIKE ? OR id_spp LIKE ? )', ['%' .$text. '%', '%' .$text. '%'])
 		-> orderBy('id_spp', 'desc')
 		-> paginate(10);
@@ -403,41 +403,21 @@ class SppController extends Controller
 	{
 		$data_spp = $request_spp->all();
 
-		$nomor_spp = $data_spp ['nomor_spp'];		
-		$tgl_dok = $data_spp ['tgl_dok'];
-		$ket_spp = $data_spp ['ket_spp'];
-		$pj = $data_spp ['pj'];
-		$jenis_belanja = $data_spp ['jenis_belanja'];
-		$nilai_spp = $data_spp ['nilai_spp'];
-		$tgl_bapp = $data_spp ['tgl_bapp'];
-		$tgl_terima = $data_spp ['tgl_terima'];
-		$tgl_kembali = $data_spp ['tgl_kembali'];
-		$tgl_terima_kembali = $data_spp ['tgl_terima_kembali'];
-		$posisi_dok = $data_spp ['posisi_dok'];
-
 		$data_edit = [
-			'nomor_spp' => $nomor_spp,
-			'tgl_dok_spp' => $tgl_dok,
-			'ket_spp' => $ket_spp,
-			'pj' => $pj,
-			'jenis_belanja' => $jenis_belanja,
-			'nilai_spp' => $nilai_spp,
-			'tgl_bapp' => $tgl_bapp,
-			'tgl_terima' => $tgl_terima,
-			'tgl_dikembalikan' => $tgl_kembali,
-			'tgl_penerimaan_kembali' => $tgl_terima_kembali,
-			'posisi_dok' => $posisi_dok,
+			'tgl_terima' => $data_spp ['tgl_terima']
 		];
 
 		$data_lama = DB::table('tb_spp') -> where ('id_spp', $id_spp) ->first();
 		$data_baru = $data_edit;
 		$tipe = 'spp';
-		$key = $nomor_spp;
+		$key = $data_lama->nomor_spp;
 
 		DB::table('tb_spp') -> where ('id_spp', $id_spp) -> update($data_edit);
 		Helper::CreateLog($tipe, $key, $data_lama, $data_baru);
 
-		return redirect ('spp_detail/'.$id_spp);
+		$url_redirect = $request_spp->query('back', 'spp_detail/'.$id_spp);
+
+		return redirect ($url_redirect);
 	}
 
 	public function verifikasi1_edit(Request $request_spp, $id_spp)

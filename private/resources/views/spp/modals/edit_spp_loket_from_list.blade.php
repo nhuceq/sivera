@@ -1,7 +1,7 @@
 <!-- Modal Edit SPP Loket -->
-<div class="modal fade" id="edit_spp_loket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit_spp_loket_from_list" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
-		<form class="modal-content" method="post" action="{{url('/spp_edit_loket/')}}/{{$data_spp->id_spp}}">
+		<form class="modal-content" method="post" action="">
 			{{ csrf_field() }} 
 			<div class="modal-header">
 				<h4 class="modal-title" id="exampleModalLabel">Form Edit SPP</h4>
@@ -14,38 +14,38 @@
 					<div class="col-md-4">
 						<div class="form-group col-md">
 							<label>Nomor Pengajuan</label>
-							<input type="text" class="form-control" placeholder="" name="nomor_pengajuan" readonly="" value ="{{ $data_spp -> id_spp }}">
+							<input type="text" class="form-control" id="id_spp" readonly>
 						</div>
 						<div class="form-group col-md">
 							<label>Nomor SPP</label>
-							<input type="text" class="form-control" placeholder="" name="nomor_spp" required value ="{{ $data_spp -> nomor_spp }}" readonly>
+							<input type="text" class="form-control" id="nomor_spp" readonly>
 						</div>
 						<div class="form-group col-md">
 							<label >Tanggal Dokumen SPP</label>
-							<input type="date" class="form-control" placeholder="" name="tgl_dok" required value="{{ $data_spp -> tgl_dok_spp }}" readonly>
+							<input type="date" class="form-control" id="tgl_dok" readonly>
 
 						</div>		
 
 						<div class="form-group col-md">
 							<label>Pertanggung Jawaban</label>
-							<input type="text" class="form-control" value="{{ $nama_pj }}" readonly />
+							<input type="text" class="form-control" id="nama_pj" readonly />
 						</div>
 
 						
 						<div class="form-group col-md">
 							<label>Sifat Bayar</label>
-							<select class="form-control" name="sifat_bayar" readonly>
+							<select class="form-control" id="sifat_bayar" readonly>
 							</select>
 						</div>
 						<div class="form-group col-md">
 							<label>Jenis Bayar</label>
-							<select class="form-control" name="jenis_bayar" readonly>
+							<select class="form-control" id="jenis_bayar" readonly>
 							</select>
 						</div>			
 
 						<div class="form-group col-md">
 							<label>Nama Bayar</label>
-							<select class="form-control" name="nama_bayar" readonly>
+							<select class="form-control" id="nama_bayar" readonly>
 							</select>
 						</div>		
 						
@@ -56,22 +56,22 @@
 
 						<div class="form-group col-md">
 							<label>Keterangan SPP</label>
-							<textarea class="form-control" rows="3" name="ket_spp" readonly>{{$data_spp->ket_spp}}</textarea>
+							<textarea class="form-control" rows="3" id="ket_spp" readonly></textarea>
 						</div>
 						
 						<div class="form-group col-md">
 							<label>Jenis Belanja</label>
-							<input type="text" class="form-control" name="jenis_belanja" value="{{ $data_spp -> jenis_belanja }}" readonly>
+							<input type="text" class="form-control" id="jenis_belanja" readonly>
 						</div>
 
 						<div class="form-group col-md">
 							<label>Nilai SPP</label>
-							<input type="text" class="form-control" name="nilai_spp" value="{{ $data_spp -> nilai_spp }}" readonly>
+							<input type="text" class="form-control" id="nilai_spp" readonly>
 						</div>
 
 						<div class="form-group col-md">
 							<label>Tanggal Terima SPP</label>
-							<input type="date" class="form-control" name="tgl_terima" required value="{{ $data_spp -> tgl_terima }}" >
+							<input type="date" class="form-control" style="border: 1px solid green" id="tgl_terima"  name="tgl_terima" required >
 						</div>
 						
 					</div>
@@ -81,17 +81,17 @@
 						
 						<div class="form-group col-md">
 							<label>Tanggal Dikembalikan SPP</label>
-							<input type="date" class="form-control" name="tgl_kembali" value="{{ $data_spp -> tgl_dikembalikan}}" readonly />
+							<input type="date" class="form-control" id="tgl_kembali" readonly>
 						</div>								
 
 						<div class="form-group col-md">
 							<label>Tanggal Penerimaan Kembali</label>
-							<input type="date" class="form-control" name="tgl_terima_kembali" value="{{ $data_spp -> tgl_penerimaan_kembali }}" readonly />
+							<input type="date" class="form-control" id="tgl_terima_kembali" readonly>
 						</div>
 
 						<div class="form-group col-md">
 							<label>Posisi Dokumen Kembali</label>
-							<input type="text" class="form-control" name="posisi_dok" value="{{ $data_spp -> posisi_dok }}" readonly />
+							<input type="text" class="form-control" id="posisi_dok" readonly>
 						</div>
 					</div>
 				</div>

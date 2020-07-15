@@ -59,6 +59,7 @@ Daftar SPP
 <br>
 
 @include('spp.modals.pengajuan_spp')
+@include('spp.modals.edit_spp_loket_from_list')
 
 <!-- listing -->
 
@@ -90,12 +91,13 @@ Daftar SPP
 
 		?>
 		@foreach ($data_spp as $spp)
-
+		<?php
+		$json_spp = json_encode($spp);
+		?>
 		<tr>
 			<td>{{ $i }}</td>
 			<td>{{ $spp -> id_spp }}</td>
 			<td>{{ $spp -> nomor_spp }}</td>
-			<!-- <td>{{ $spp -> loket_nama }}</td> -->
 			<td>{{ $spp -> tgl_dok_spp }}</td>
 			@if( $spp -> mekanisme_cair == 1 )
 			<td>LS</td>
@@ -114,7 +116,7 @@ Daftar SPP
 			@endif
 
 
-			<td>{{ $spp -> pj }}</td>
+			<td>{{ $spp -> nama_pj }}</td>
 			<td>{{$spp -> nilai_spp }}</td>
 			<td>{{ $spp -> status_spp }}</td>
 			<td>{{ $spp -> nomor_sp2d }}</td>
@@ -123,6 +125,7 @@ Daftar SPP
 			<td class="text-nowrap">
 				@if (Auth::user() -> role == 'user_loket')
 				<a href="{{ url ('/spp_detail/') }}/{{ $spp -> id_spp }}" class="btn btn-info btn-sm" name="detail">Detail</a>
+				<button data-json="{{ $json_spp }}" class="btn btn-warning btn-sm edit-json">Edit</button>
 				<a href="{{ url('/spp_routing/'. $spp->id_spp ) }}" class="btn btn-success btn-sm">Routing 2</a>
 				@elseif (Auth::user() -> role == 'verifikator1')	
 				<a href="{{ url ('/spp_detail/') }}/{{ $spp -> id_spp }}" class="btn btn-info btn-sm">Detail</a>
@@ -229,6 +232,18 @@ function formatRupiah(angka, prefix){
 		// $('#nama_bayar').change(function(){
 			
 		// });
+
+		$('.edit-json').click(function(){
+			let data = $(this).data('json')
+			let keys = Object.keys(data)
+			let action = "{{ url('/spp_edit_loket') }}/" + data.id_spp + "?back=" + location.href
+			$('#edit_spp_loket_from_list').modal('show')
+
+			$('#edit_spp_loket_from_list form').attr('action', action)
+			for (let k of keys) {
+				$('#edit_spp_loket_from_list #'+k).val(data[k])
+			}
+		})
 	});
 
 // function syarat(){
