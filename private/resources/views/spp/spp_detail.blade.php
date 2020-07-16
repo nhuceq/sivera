@@ -179,8 +179,15 @@ Detail SPP
 
 					@elseif (Auth::user()->role == 'user_biasa')	 
 					
+					<button type="button" class="btn btn-success float-left btn-sm">
+						Cetak
+					</button>
 
 					@endif 
+
+					<button type="button" class="btn btn-primary float-left btn-sm" data-toggle="modal" data-target="#kelengkapan_dokumen">
+						Kelengkapan Dokumen
+					</button>
 				</div>
 			</div>
 
@@ -194,9 +201,48 @@ Detail SPP
 		@include('spp.modals.edit_spp_loket')
 		@include('spp.modals.edit_spp_ver1')
 		@include('spp.modals.edit_spp_ver2')
+		@include('spp.modals.kelengkapan_dokumen')
 
 	</div>
 </div>
 </div>
 
+@endsection
+
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+	const jenisDok = JSON.parse('<?php echo json_encode($jenis_dok) ?>')
+	const dokHub = JSON.parse('<?php echo json_encode($dok_hub) ?>')
+	const role = '{{ Auth::user()->role }}'
+	const vm = new Vue({
+		el: '#kelengkapan_dokumen',
+		data() {
+			return {
+				jenisDok: jenisDok,
+				dokHub: dokHub,
+				isUserBiasa: role == 'user_biasa' ? true : false
+			}
+		},
+		computed: {
+			list() {
+				let jenis = jenisDok
+				for (let d of dokHub) {
+					let i = jenis.findIndex(x => x.id_jenis_dok == d.id_jenis_dok)
+					jenis[i].is_uploaded = true
+				}
+				return jenis
+			}
+		}
+	})
+</script>
+<script>
+	$(document).ready(function(){
+		let qs = new URLSearchParams(location.search)
+		let form = qs.get('show_form')
+		if (form) {
+			$('#'+form).modal('show')
+		}
+	})
+</script>
 @endsection

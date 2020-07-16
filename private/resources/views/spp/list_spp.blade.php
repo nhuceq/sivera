@@ -70,10 +70,9 @@ Daftar SPP
 				<th>No.</th>
 				<th>No. Pengajuan</th>
 				<th>No. SPP</th>
-				<!-- <th>Nama Petugas</th> -->
 				<th>Tgl SPP</th>
-				<th>Jenis</th>
-				<th>Penerima Hak</th>
+				<th>Sifat Bayar</th>
+				<th>Jenis Bayar</th>
 				<th>Unit</th>
 				<th>Nilai</th>
 				<th>Status</th>
@@ -99,25 +98,10 @@ Daftar SPP
 			<td>{{ $spp -> id_spp }}</td>
 			<td>{{ $spp -> nomor_spp }}</td>
 			<td>{{ $spp -> tgl_dok_spp }}</td>
-			@if( $spp -> mekanisme_cair == 1 )
-			<td>LS</td>
-			@elseif( $spp -> mekanisme_cair == 2 )
-			<td>UP</td>
-			@elseif( $spp -> mekanisme_cair == 3 )
-			<td>GUP</td>
-			@else
-			<td>PTUP</td>
-			@endif
-
-			@if( $spp -> penerima_hak ==1 )
-			<td>Bendahara Pengeluaran</td>
-			@else
-			<td>Pihak Ketiga</td>	
-			@endif
-
-
+			<td>{{ $spp -> sifat_bayar }}</td>
+			<td>{{ $spp -> jenis_bayar }}</td>
 			<td>{{ $spp -> nama_pj }}</td>
-			<td>{{$spp -> nilai_spp }}</td>
+			<td>{{ $spp -> nilai_spp }}</td>
 			<td>{{ $spp -> status_spp }}</td>
 			<td>{{ $spp -> nomor_sp2d }}</td>
 

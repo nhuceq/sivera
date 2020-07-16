@@ -14,33 +14,14 @@ use App\Http\Controllers\Helper;
  */
 class SppController extends Controller
 {
-	// var $Hp = new Helper;
 	public function cek_jarak($bapp, $terima)
 	{
-		// $t_bapp = date('z', strtotime($bapp));
-		// $t_terima = date('z', strtotime($terima));
-
-		// $db = DB::table('tb_libur')->get();
-		// $libur = [];
-		// foreach ($db as $v) {
-		// 	$libur[] = date('z', strtotime($v->tanggal));
-		// }
-		// $jarak = 0;
-		// for ($i=$t_bapp; $i < $t_terima; $i++) { 
-		// 	if(!in_array($i, $libur)) {
-		// 		$jarak++;
-		// 	}
-		// }
-
 		$diff = date_diff(date_create($bapp), date_create($terima));
 		$diff_day = $diff->days;
-		// print_r($diff);
-		// print_r($bapp);
-		// print_r($terima);
+
 		$db = DB::table('tb_libur')->where('tanggal', '>=', $bapp)->where('tanggal', '<', $terima)->count();
 		$jarak = $diff_day - $db;
 		return $jarak;
-		// return 0;
 	}
 
 	public function dashboard(Request $request_spp)
@@ -86,23 +67,21 @@ class SppController extends Controller
 
 	public function list_spp(Request $request_spp)
 	{
-
 		$data_spp = $request_spp -> all();
 
 		//mengecek apakah pencarian atau bukan
-		if (isset($data_spp['cari'])) 
-		{
+		if (isset($data_spp['cari'])) {
 			$text=$data_spp['cari'];
 		}
-		else
-		{
+		else {
 			$text = '';
 		}	
 
 
 		$spp = DB::table('tb_spp')
-		-> select('tb_spp.*', 'penanggung_jawab.nama_pj')
+		-> select('tb_spp.*', 'penanggung_jawab.nama_pj', 'tb_bayar.sifat_bayar', 'tb_bayar.jenis_bayar', 'tb_bayar.nama_bayar')
 		-> leftJoin('penanggung_jawab', 'tb_spp.id_pj','=', 'penanggung_jawab.id')
+		-> leftJoin('tb_bayar', 'tb_spp.id_bayar','=', 'tb_bayar.id')
 		-> whereRaw('( nomor_spp LIKE ? OR id_spp LIKE ? )', ['%' .$text. '%', '%' .$text. '%'])
 		-> orderBy('id_spp', 'desc')
 		-> paginate(10);
@@ -114,11 +93,9 @@ class SppController extends Controller
 		$user_id_pj = Auth::user()->id_pj;
 		$pj = DB::table('penanggung_jawab')->where('id', $user_id_pj)->first();
 
-		return view ('spp.list_spp', ['data_spp' => $spp, 'pj' => $pj ])->with('sifat_bayar_list', $sifat_bayar_list);;	
-
-		
-		// return view('spp.list_spp')
+		return view ('spp.list_spp', ['data_spp' => $spp, 'pj' => $pj ])->with('sifat_bayar_list', $sifat_bayar_list);
 	}	
+
 	function fetch(Request $request)
 	{
 		$select = $request->get('select');
@@ -132,15 +109,12 @@ class SppController extends Controller
 		$output = '<option value="">Pilih '.ucfirst($dependent).'</option>';
 		foreach($data as $row)
 		{
-			$output .= '<option value="'.$row->$dependent.'">'.$row->$dependent.'</option>';
+			$val = $dependent == 'nama_bayar' ? $row->id : $row->$dependent;
+			$output .= '<option value="'.$val.'">'.$row->$dependent.'</option>';
 		}
 
 		echo $output;
 	}
-
-
-
-
 
 	public function laporan_spp(Request $request_spp)
 	{
@@ -249,8 +223,6 @@ class SppController extends Controller
 		return Excel::download(new SppExport, 'SppAll.xlsx');
 	}
 
-
-
 	public function laporan_dispen(Request $request_spp)
 	{
 		$data_spp = $request_spp -> all();
@@ -334,12 +306,17 @@ class SppController extends Controller
 		->first();
 		$nama_ver2 = $ver2 ? $ver2->nama_lengkap : '';
 
+		$jenis_dok = DB::table('tb_jenis_dok')->where('id_bayar', $spp->id_bayar)->get();
+		$dok_hub = DB::table('tb_dok_hub')->where('id_spp', $spp->id_spp)->get();
+
 		return view ('spp.spp_detail', [
 			'data_spp' => $spp,
 			'nama_loket' => $nama_loket,
 			'nama_ver1' => $nama_ver1,
 			'nama_ver2' => $nama_ver2,
 			'nama_pj' => $nama_pj,
+			'jenis_dok' => $jenis_dok,
+			'dok_hub' => $dok_hub,
 		]);
 
 	}
@@ -359,7 +336,6 @@ class SppController extends Controller
 	{
 		$data_spp = $request_spp -> all();
 
-
 		$nomor_spp = $data_spp ['nomor_spp'];
 		$tgl_dok = $data_spp ['tgl_dok'];
 		$ket_spp = $data_spp ['ket_spp'];
@@ -377,7 +353,8 @@ class SppController extends Controller
 			'nilai_spp' => $nilai_spp,
 			'tgl_bapp' => $tgl_bapp,
 			'tgl_input' => date('y-m-d H:i:s'),
-			'kode_user_biasa' => $kode_user_biasa
+			'kode_user_biasa' => $kode_user_biasa,
+			'id_bayar' => $data_spp['id_bayar']
 		];
 
 		$spp = DB::table('tb_spp') -> where ('nomor_spp', $nomor_spp ) -> first();
@@ -386,7 +363,7 @@ class SppController extends Controller
 			return redirect()->back()->with('error', 'Nomor SPP sudah ada');
 		}
 		else {
-			DB::table('tb_spp') -> insert ($data_save);
+			$spp_id = DB::table('tb_spp') -> insertGetId ($data_save);
 
 			$data_lama = "";
 			$data_baru = $data_save;
@@ -394,7 +371,7 @@ class SppController extends Controller
 			$key = $nomor_spp;
 			Helper::CreateLog($tipe, $key, $data_lama, $data_baru);
 
-			return redirect ('spp_view');
+			return redirect ('/spp_detail/'. $spp_id .'?show_form=kelengkapan_dokumen');
 		}
 
 	}
@@ -404,7 +381,8 @@ class SppController extends Controller
 		$data_spp = $request_spp->all();
 
 		$data_edit = [
-			'tgl_terima' => $data_spp ['tgl_terima']
+			'tgl_terima' => $data_spp ['tgl_terima'],
+			'kode_user_loket' => Auth::user()->id
 		];
 
 		$data_lama = DB::table('tb_spp') -> where ('id_spp', $id_spp) ->first();

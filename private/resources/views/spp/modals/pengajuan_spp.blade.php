@@ -74,7 +74,7 @@
 
 						<div class="form-group col-md">
 							<label>Sifat Bayar</label>
-							<select name="sifat_bayar" id="sifat_bayar" class="form-control input-lg dynamic" data-dependent="jenis_bayar">
+							<select name="sifat_bayar" id="sifat_bayar" class="form-control dynamic" data-dependent="jenis_bayar">
 								<option value="">Pilih Sifat Bayar</option>
 								@foreach($sifat_bayar_list as $sifat_bayar)
 								<option value="{{ $sifat_bayar->sifat_bayar}}">{{ $sifat_bayar->sifat_bayar }}</option>
@@ -85,14 +85,14 @@
 
 						<div class="form-group col-md">
 							<label>Jenis Bayar</label>
-							<select name="jenis_bayar" id="jenis_bayar" class="form-control input-lg dynamic" data-dependent="nama_bayar">
+							<select name="jenis_bayar" id="jenis_bayar" class="form-control dynamic" data-dependent="nama_bayar">
 								<option value="">Pilih Jenis Bayar</option>
 							</select>
 						</div>
 						
 						<div class="form-group col-md">
 							<label>Nama Bayar</label>
-							<select name="nama_bayar" id="nama_bayar" class="form-control input-lg dynamic">
+							<select name="id_bayar" id="nama_bayar" class="form-control">
 								<option value="">Pilih Nama Bayar</option>
 							</select>
 						</div>
