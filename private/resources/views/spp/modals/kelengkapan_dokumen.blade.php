@@ -12,15 +12,15 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Status</th>
+							<th style="width: 110px;">Status Upload</th>
 							<th>Nama Dokumen</th>
 							<th>Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="dok in list">
-							<td>
-								<input type="checkbox" :checked="dok.is_uploaded" disabled>
+							<td class="text-center">
+								<i class="fa fa-check text-success" v-show="dok.is_uploaded"></i>
 							</td>
 							<td>@{{ dok.jenis_dok }}</td>
 							<td style="white-space: nowrap;">
