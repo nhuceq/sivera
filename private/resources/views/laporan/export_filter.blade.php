@@ -5,8 +5,8 @@
 				<th><b>Id</b></th>
 				<th><b>Nomor SPP</b></th>
 				<th><b>Tgl SPP</b></th>
-				<th><b>Mekanisme Cair</b></th>
-				<th><b>Penerima Hak</b></th>
+				<th><b>Sifat Bayar</b></th>
+				<th><b>Jenis Bayar</b></th>
 				<th><b>Keterangan SPP</b></th>
 				<th><b>Unit</b></th>
 				<th><b>Jenis Belanja</b></th>
@@ -37,24 +37,10 @@
 			<td>{{ $spp -> id_spp }}</td>
 			<td>{{ $spp -> nomor_spp }}</td>
 			<td>{{ $spp -> tgl_dok_spp }}</td>
-			@if( $spp -> mekanisme_cair == 1 )
-			<td>LS</td>
-			@elseif( $spp -> mekanisme_cair == 2 )
-			<td>UP</td>
-			@elseif( $spp -> mekanisme_cair == 3 )
-			<td>GUP</td>
-			@else
-			<td>PTUP</td>
-			@endif
-
-			@if( $spp -> penerima_hak ==1 )
-			<td>Bendahara Pengeluaran</td>
-			@else
-			<td>Pihak Ketiga</td>	
-			@endif
-			
+			<td>{{ $spp -> sifat_bayar }}</td>
+			<td>{{ $spp -> jenis_bayar }}</td>			
 			<td>{{ $spp -> ket_spp }}</td>			
-			<td>{{ $spp -> pj }}</td>
+			<td>{{ $spp -> nama_pj }}</td>
 			<td>{{ $spp -> jenis_belanja }}</td>
 			<td>{{ $spp -> nilai_spp }}</td>
 			<td>{{ $spp -> tgl_terima }}</td>

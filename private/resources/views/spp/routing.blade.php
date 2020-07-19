@@ -19,7 +19,7 @@
 					
 					<td width="40%"><b>Pengirim SPP</b></td>
 					<td width="2%"><b>:</b> </td>
-					<td width="45%" colspan="2"><b>{{ $data_spp->pj }}</b></td>
+					<td width="45%" colspan="2"><b>{{ $data_spp->nama_pj }}</b></td>
 									
 				</tr>
 
@@ -33,32 +33,14 @@
 				<tr>
 					<td width="40%"><b>Jenis SPP</b></td>
 					<td width="2%"><b>:</b></td>
-					<td width="15%"><b>
-						@if ( $data_spp->mekanisme_cair == 1 )
-								LS 
-						@elseif ( $data_spp->mekanisme_cair == 2 )	
-								UP 	
-						@elseif ( $data_spp->mekanisme_cair == 3 )	
-								GUP 	
-						@else
-							 PTUP 	
-						@endif
-						</b>
-					</td>
+					<td width="15%"><b>{{ $data_spp->sifat_bayar }}</b></td>
 					<td width="33%"></td>
 				</tr>	
 
 				<tr>
 					<td width="40%"><b>Dibayarkan Kepada</b></td>
 					<td width="2%"><b>:</b></td>
-					<td width="45%" colspan="2"><b>
-						 @if ( $data_spp->penerima_hak == 1 )
-						 	Bendahara Pengeluaran
-						 @else
-						 	Pihak Ketiga
-						 @endif	</b>	 		
-
-					</td>
+					<td width="45%" colspan="2"><b>{{ $data_spp->jenis_bayar }}</b></td>
 				</tr>
 
 				<tr>

@@ -45,6 +45,7 @@ class UserController extends Controller
         -> first();
 
     	return view ('user.user_detail', [
+            'menu_profil'=>true,
     		'data_user' => $user,
     	]);
 

@@ -24,23 +24,9 @@
 			<td>{{ $spp -> tgl_terima }}</td>
 			<td>{{ $spp -> tgl_bapp }}</td>
 			<td>{{ $spp -> terlambat }}</td>
-			@if( $spp -> mekanisme_cair == 1 )
-			<td>LS</td>
-			@elseif( $spp -> mekanisme_cair == 2 )
-			<td>UP</td>
-			@elseif( $spp -> mekanisme_cair == 3 )
-			<td>GUP</td>
-			@else
-			<td>PTUP</td>
-			@endif
-
-			@if( $spp -> penerima_hak ==1 )
-			<td>Bendahara Pengeluaran</td>
-			@else
-			<td>Pihak Ketiga</td>
-			@endif	
-
-			<td>{{ $spp -> pj }}</td>
+			<td>{{ $spp -> sifat_bayar }}</td>
+			<td>{{ $spp -> jenis_bayar }}</td>
+			<td>{{ $spp -> nama_pj }}</td>
 			<td>{{ $spp -> nilai_spp }}</td>
 		</tr>
 		<?php $i++; ?>

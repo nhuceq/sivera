@@ -16,6 +16,10 @@ class SppController extends Controller
 {
 	public function cek_jarak($bapp, $terima)
 	{
+		if (!$bapp || !$terima) {
+			return 0;
+		}
+
 		$diff = date_diff(date_create($bapp), date_create($terima));
 		$diff_day = $diff->days;
 
@@ -32,17 +36,8 @@ class SppController extends Controller
 		
 		$spp = DB::table('tb_spp')
 		-> select('tb_spp.*', 'tb_user.username as loket_nama')
-		-> leftJoin('tb_user', 'tb_spp.kode_user_loket','=', 'tb_user.id');
-
-
-		if( isset($data_spp['filter_pj']) && $data_spp['filter_pj'] != 'Semua' ) {
-			$spp->where('pj', 'like' , '%'. $data_spp['filter_pj'] . '%');
-		}	
-
-
-		$spp = $spp-> orderBy('id_spp', 'desc')-> get()->toArray();
-
-
+		-> leftJoin('tb_user', 'tb_spp.kode_user_loket','=', 'tb_user.id')
+		-> orderBy('id_spp', 'desc')-> get()->toArray();
 
 		$spp_final = [];
 		$i = 0;
@@ -60,9 +55,7 @@ class SppController extends Controller
 		}
 
 		$jml_dispen = count($spp_final);
-
-		return view ('dashboard', ['jml_spp' => $jml_spp, ], ['jml_dispen' => $jml_dispen, ] );
-
+		return view ('dashboard', ['menu_dashboard'=>true, 'jml_spp' => $jml_spp, 'jml_dispen' => $jml_dispen ]);
 	}
 
 	public function list_spp(Request $request_spp)
@@ -93,7 +86,7 @@ class SppController extends Controller
 		$user_id_pj = Auth::user()->id_pj;
 		$pj = DB::table('penanggung_jawab')->where('id', $user_id_pj)->first();
 
-		return view ('spp.list_spp', ['data_spp' => $spp, 'pj' => $pj ])->with('sifat_bayar_list', $sifat_bayar_list);
+		return view ('spp.list_spp', ['menu_kelola_spp'=>true, 'data_spp' => $spp, 'pj' => $pj ])->with('sifat_bayar_list', $sifat_bayar_list);
 	}	
 
 	function fetch(Request $request)
@@ -121,12 +114,12 @@ class SppController extends Controller
 		$data_spp = $request_spp -> all();
 
 		$spp = DB::table('tb_spp')
-		-> select('tb_spp.*', 'tb_user.username as loket_nama')
-		-> leftJoin('tb_user', 'tb_spp.kode_user_loket','=', 'tb_user.id');
+		-> select('tb_spp.*', 'tb_bayar.*', 'penanggung_jawab.nama_pj')
+		-> leftJoin('tb_bayar', 'tb_bayar.id','=', 'tb_spp.id_bayar')
+		-> leftJoin('penanggung_jawab', 'penanggung_jawab.id','=', 'tb_spp.id_pj');
 
 		if ( Auth::user()->role == "user_biasa"){
-			$unit=Auth::user()->unit;
-			$spp-> where ('pj', 'like', '%'. $unit . ' %');
+			$spp-> where ('tb_spp.id_pj', Auth::user()->id_pj);
 		}	
 
 		$filter_bulan = isset($data_spp['filter_bulan']) ? $data_spp['filter_bulan'] : 'Semua';
@@ -139,7 +132,7 @@ class SppController extends Controller
 		}
 
 		if( $filter_pj != 'Semua' ) {
-			$spp->where('pj', 'like' , '%'. $data_spp['filter_pj'] . '%');
+			$spp->where('tb_spp.id_pj', $data_spp['filter_pj']);
 		}
 
 		if( $filter_status_spp != 'Semua' ) {
@@ -165,7 +158,8 @@ class SppController extends Controller
 			$url .= '?download=true';
 		}
 
-		return view ('laporan.laporan_filter', ['data_spp' => $spp, 'link_dl' => $url ]);	
+		$list_pj = DB::table('penanggung_jawab')->get();
+		return view ('laporan.laporan_filter', ['menu_laporan_spp'=>true, 'data_spp' => $spp, 'link_dl' => $url, 'list_pj' => $list_pj ]);	
 	}
 
 	public function getVerifikator($spp)
@@ -228,28 +222,22 @@ class SppController extends Controller
 		$data_spp = $request_spp -> all();
 
 		$spp = DB::table('tb_spp')
-		-> select('tb_spp.*', 'tb_user.username as loket_nama')
-		-> leftJoin('tb_user', 'tb_spp.kode_user_loket','=', 'tb_user.id');
+		-> select('tb_spp.*', 'tb_bayar.*', 'penanggung_jawab.nama_pj')
+		-> leftJoin('tb_bayar', 'tb_bayar.id','=', 'tb_spp.id_bayar')
+		-> leftJoin('penanggung_jawab', 'penanggung_jawab.id','=', 'tb_spp.id_pj');
 
 		if ( Auth::user()->role == "user_biasa"){
-			$unit=Auth::user()->unit;
-			$spp-> where ('pj', 'like', '%'. $unit . ' %');
-		}		
-
-
+			$spp-> where ('tb_spp.id_pj', Auth::user()->id_pj);
+		}
 		if( isset($data_spp['filter_pj']) && $data_spp['filter_pj'] != 'Semua' ) {
-			$spp->where('pj', 'like' , '%'. $data_spp['filter_pj'] . '%');
-		}	
-
+			$spp->where('tb_spp.id_pj', $data_spp['filter_pj']);
+		}
 		if( isset($data_spp['filter_bulan']) && $data_spp['filter_bulan'] != 'Semua' ) {
 			$spp->whereMonth('tgl_dok_spp', $data_spp['filter_bulan'])
 			->whereYear('tgl_dok_spp', $data_spp['filter_tahun']);
 		}
 
-
 		$spp = $spp-> orderBy('id_spp', 'desc')-> get() -> toArray();
-
-
 
 		$spp_final = [];
 		$i = 0;
@@ -278,7 +266,8 @@ class SppController extends Controller
 			$url .= '?download=true';
 		}
 
-		return view ('laporan.laporan_dispen', ['data_spp' => $spp_final, 'link_dl' => $url ]);	
+		$list_pj = DB::table('penanggung_jawab')->get();
+		return view ('laporan.laporan_dispen', ['menu_laporan_dispen'=>true, 'data_spp' => $spp_final, 'link_dl' => $url, 'list_pj' => $list_pj ]);	
 	}
 
 	public function detail_spp($id_spp)
@@ -324,12 +313,13 @@ class SppController extends Controller
 	public function spp_routing($id_spp)
 	{
 		$spp = DB::table ('tb_spp')
-		-> where ('id_spp', $id_spp) -> first();
+		-> select('tb_spp.*', 'tb_bayar.*', 'penanggung_jawab.nama_pj')
+		-> leftJoin('tb_bayar', 'tb_bayar.id','=', 'tb_spp.id_bayar')
+		-> leftJoin('penanggung_jawab', 'penanggung_jawab.id','=', 'tb_spp.id_pj')
+		-> where ('id_spp', $id_spp)
+		-> first();
 
-		return view ('spp.routing', [
-			'data_spp' => $spp, ]);
-
-
+		return view ('spp.routing', ['data_spp' => $spp]);
 	}
 
 	public function spp_save(Request $request_spp)
@@ -443,22 +433,16 @@ class SppController extends Controller
 	{
 
 		$data_spp = $request_spp -> all();
-
-
-		// $kategori_catatan = $data_spp ['kategori_catatan'];
 		$catatan_verifikator = $data_spp ['catatan_verifikator'];
 		$status_spp = $data_spp ['status_spp'];
 		$kode_ver2 = Auth::user()->id;
 
 		$data_edit = [
-
-
-			// 'kategori_catatan' => $kategori_catatan,
 			'catatan_verifikator' => $catatan_verifikator,
 			'status_spp' => $status_spp,
 			'kode_ver2' => $kode_ver2
-
 		];
+
 		DB::table('tb_spp') -> where ('id_spp', $id_spp) -> update($data_edit);
 		return redirect ('spp_detail/'.$id_spp);
 	}
@@ -468,34 +452,4 @@ class SppController extends Controller
 		DB::table('tb_spp') -> where ('id_spp', $id_spp) -> delete();
 		return redirect ('spp_view');
 	}
-
-
-
-	// class DynamicDependent extends Controller
-	// {
-// public function index()
-// {
-// 	$sifat_bayar_list = DB::table('tb_bayar')
-// 	->groupBy('sifat_bayar')
-// 	->get();
-// 	return view('spp.list_spp')->with('sifat_bayar_list', $sifat_bayar_list);
-// }
-
-// function fetch(Request $request)
-// {
-// 	$select = $request->get('select');
-// 	$value = $request->get('value');
-// 	$dependent = $request->get('dependent');
-// 	$data = DB::table('tb_bayar')
-// 	->where($select, $value)
-// 	->groupBy($dependent)
-// 	->get();
-// 	$output = '<option value="">Select '.ucfirst($dependent).'</option>';
-// 	foreach($data as $row)
-// 	{
-// 		$output .= '<option value="'.$row->$dependent.'">'.$row->$dependent.'</option>';
-// 	}
-// 	echo $output;
-
-	// }
 }

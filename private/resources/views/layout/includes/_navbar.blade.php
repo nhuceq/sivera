@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-fixed-top">
-			<div class="brand">
+			<div class="brand" style="padding: 25px;">
 				<a href=""><img src="{{asset('admin/logo2.png')}}" alt="MySPP" class="img-responsive logo"></a>
 			</div>
 			<div class="container-fluid">
