@@ -12,27 +12,25 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th>Nama Dokumen</th>
-							<th style="white-space: nowrap;">Wajib Upload</th>
 							<th>Status</th>
+							<th>Nama Dokumen</th>
 							<th>Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="dok in list">
-							<td>@{{ dok.jenis_dok }}</td>
-							<td>@{{ dok.is_required ? 'Ya' : 'Tidak' }}</td>
 							<td>
 								<input type="checkbox" :checked="dok.is_uploaded" disabled>
 							</td>
+							<td>@{{ dok.jenis_dok }}</td>
 							<td style="white-space: nowrap;">
-								<button class="btn btn-sm btn-success" v-show="isUserBiasa">Upload</button>
-								<button class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
+								<button class="btn btn-sm btn-success" @click="uploadDokumen(dok.id)" v-show="isUserBiasa">Upload</button>
+								<a :href="'/'+dok.file" target="_blank" class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
 									<i class="fa fa-eye"></i>
-								</button>
-								<button class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
+								</a>
+								<a :href="'/download_dokumen/'+dok.file" target="_blank" class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
 									<i class="fa fa-download"></i>
-								</button>
+								</a>
 							</td>
 						</tr>
 					</tbody>
@@ -44,4 +42,8 @@
 			</div>
 		</form>
 	</div>
+</div>
+<div  style="display: none">
+	<input type="file" name="file_dokumen" id="file_dokumen">
+	<input type="hidden" name="id_jenis_dok" id="id_jenis_dok">
 </div>

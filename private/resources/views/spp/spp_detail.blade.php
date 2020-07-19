@@ -149,7 +149,7 @@ Detail SPP
 					<!-- Button trigger modal edit spp-->
 					<button type="button" class="btn btn-primary float-left btn-sm" data-toggle="modal" data-target="#edit_spp_loket">
 						Edit Data SPP
-					</button><br><br>
+					</button>
 
 					@elseif(Auth::user()->role =='verifikator1')
 					<!-- Button trigger modal edit verifikasi-->
@@ -213,25 +213,44 @@ Detail SPP
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
 	const jenisDok = JSON.parse('<?php echo json_encode($jenis_dok) ?>')
-	const dokHub = JSON.parse('<?php echo json_encode($dok_hub) ?>')
 	const role = '{{ Auth::user()->role }}'
 	const vm = new Vue({
 		el: '#kelengkapan_dokumen',
 		data() {
 			return {
 				jenisDok: jenisDok,
-				dokHub: dokHub,
+				dokHub: [],
 				isUserBiasa: role == 'user_biasa' ? true : false
 			}
 		},
 		computed: {
 			list() {
 				let jenis = jenisDok
-				for (let d of dokHub) {
-					let i = jenis.findIndex(x => x.id_jenis_dok == d.id_jenis_dok)
-					jenis[i].is_uploaded = true
+				for (let d of this.dokHub) {
+					let i = jenis.findIndex(x => x.id == d.id_jenis_dok)
+					if (jenis[i]) {
+						jenis[i].is_uploaded = true
+						jenis[i].file = d.file
+					}
 				}
 				return jenis
+			}
+		},
+		mounted(){
+			this.fetchData()
+		},
+		methods: {
+			fetchData() {
+				$.ajax({
+					url: '/spp_dok_hub/{{ $data_spp->id_spp }}',
+					success(res) {
+						vm.dokHub = res.data
+					}
+				})
+			},
+			uploadDokumen(id) {
+				$('#id_jenis_dok').val(id)
+				$('#file_dokumen').trigger('click')
 			}
 		}
 	})
@@ -243,6 +262,26 @@ Detail SPP
 		if (form) {
 			$('#'+form).modal('show')
 		}
+
+		$('#file_dokumen').change(function(){
+			let file = $('#file_dokumen')[0].files[0]
+			let formData = new FormData()
+			formData.append('_token', '{{ csrf_token() }}')
+			formData.append('id_spp', '{{ $data_spp->id_spp }}')
+			formData.append('id_jenis_dok', $('#id_jenis_dok').val())
+			formData.append('file_dokumen', file)
+
+			$.ajax({
+				url: '/upload_dokumen',
+				method: 'post',
+				data: formData,
+				contentType: false,
+				processData: false,
+				success(res) {
+					vm.fetchData()
+				}
+			})
+		})
 	})
 </script>
 @endsection

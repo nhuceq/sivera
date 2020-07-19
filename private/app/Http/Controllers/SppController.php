@@ -296,7 +296,6 @@ class SppController extends Controller
 		$nama_ver2 = $ver2 ? $ver2->nama_lengkap : '';
 
 		$jenis_dok = DB::table('tb_jenis_dok')->where('id_bayar', $spp->id_bayar)->get();
-		$dok_hub = DB::table('tb_dok_hub')->where('id_spp', $spp->id_spp)->get();
 
 		return view ('spp.spp_detail', [
 			'data_spp' => $spp,
@@ -305,7 +304,6 @@ class SppController extends Controller
 			'nama_ver2' => $nama_ver2,
 			'nama_pj' => $nama_pj,
 			'jenis_dok' => $jenis_dok,
-			'dok_hub' => $dok_hub,
 		]);
 
 	}
@@ -451,5 +449,42 @@ class SppController extends Controller
 	{
 		DB::table('tb_spp') -> where ('id_spp', $id_spp) -> delete();
 		return redirect ('spp_view');
+	}
+
+	public function upload_dokumen(Request $request)
+	{
+		if (!$request->hasFile('file_dokumen')) {
+			return response()->json(400, 'Bad Request');
+		}
+
+		$req = $request->all();
+		$file = $request->file('file_dokumen');
+		$rand = \rand(100000, 999999);
+		$filename = $rand .'-'. $file->getClientOriginalName();
+		$path = $file->storeAs('uploads', $filename);
+
+		DB::table('tb_dok_hub')->insert([
+			'id_jenis_dok' => $req['id_jenis_dok'],
+			'id_spp' => $req['id_spp'],
+			'file' => $path
+		]);
+
+		return response()->json([
+			'data' => $path
+		]);
+	}
+
+	public function spp_dok_hub(Request $request, $id_spp)
+	{
+		$dokhub = DB::table('tb_dok_hub')->where('id_spp', $id_spp)->get();
+		return response()->json([
+			'data' => $dokhub
+		]);
+	}
+
+	public function download_dokumen(Request $request, $file)
+	{
+		$path = storage_path('app/uploads/'.$file);
+		return response()->download($path);
 	}
 }
