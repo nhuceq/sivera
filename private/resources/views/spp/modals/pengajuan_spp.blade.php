@@ -13,12 +13,6 @@
 				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group col-md">
-							<label>Nomor Pengajuan</label>
-							<input type="text" class="form-control" placeholder="Auto Generate" name="nomor_pengajuan" readonly>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group col-md">
 							<label>Nomor SPP</label>
 							<input type="text" class="form-control" placeholder="" name="nomor_spp" required>
 						</div>
@@ -32,7 +26,7 @@
 					<div class="col-md-4">
 						<div class="form-group col-md">
 							<label>Pertanggung Jawaban</label>
-							<input type="text" class="form-control" value="{{ $pj->nama_pj }}" readonly />
+							<input type="text" class="form-control" value="{{ $pj->nama_pj }}" disabled />
 						</div>
 					</div>
 					<div class="col-md-4">
