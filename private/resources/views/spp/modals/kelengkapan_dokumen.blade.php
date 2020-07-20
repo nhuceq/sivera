@@ -9,6 +9,14 @@
 				</button>
 			</div>
 			<div class="modal-body">
+				<p class="alert alert-{{ $data_spp->tgl_terima ? 'success' : 'warning' }}">
+					Nomor SPP {{ $data_spp->nomor_spp }} 
+					@if($data_spp->tgl_terima)
+					sudah mengirimkan dokumen fisik pada tanggal {{ $data_spp->tgl_terima }}
+					@else
+					belum mengirimkan dokumen fisik
+					@endif
+				</p>
 				<table class="table table-hover">
 					<thead>
 						<tr>
