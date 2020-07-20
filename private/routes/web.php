@@ -39,6 +39,7 @@ Route::get('/spp_delete/{nomor_spp}', 'SppController@spp_delete');
 Route::post('/upload_dokumen', 'SppController@upload_dokumen');
 Route::get('/spp_dok_hub/{id_spp}', 'SppController@spp_dok_hub');
 Route::get('/download_dokumen/uploads/{file}', 'SppController@download_dokumen');
+Route::get('/routing_unit/{id_spp}', 'SppController@routing_unit');
 
 Route::get('/laporan_spp', 'SppController@laporan_spp');
 Route::get('/laporan_dispen', 'SppController@laporan_dispen');

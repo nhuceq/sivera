@@ -8,6 +8,7 @@ use Auth;
 use App\Exports\SppExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Helper;
+use PDF;
 
 /**
  * 
@@ -487,4 +488,23 @@ class SppController extends Controller
 		$path = storage_path('app/uploads/'.$file);
 		return response()->download($path);
 	}
+
+	public function routing_unit($id_spp)
+	{
+
+		$spp = DB::table('tb_spp')
+		->leftJoin('tb_bayar', 'tb_bayar.id', 'tb_spp.id_bayar')
+		->leftJoin('penanggung_jawab', 'penanggung_jawab.id', 'tb_spp.id_pj')
+		->where('tb_spp.id_spp', $id_spp)
+		->first();
+
+		$jenis_dok = DB::table('tb_jenis_dok')->where('id_bayar', $spp->id_bayar)->get();
+
+		$pdf = PDF::loadView('spp.routing_unit', [
+			'spp' => $spp,
+			'jenis_dok' => $jenis_dok,
+		]);
+        return $pdf->download('Form-Pengajuan-SPP-'.$spp->nomor_spp.'.pdf');
+	}
+
 }
