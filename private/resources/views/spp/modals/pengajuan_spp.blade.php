@@ -26,7 +26,7 @@
 					<div class="col-md-4">
 						<div class="form-group col-md">
 							<label>Pertanggung Jawaban</label>
-							<input type="text" class="form-control" value="{{ $pj->nama_pj }}" disabled />
+							<input type="text" class="form-control" value="{{ $pj ? $pj->nama_pj : '' }}" disabled />
 						</div>
 					</div>
 					<div class="col-md-4">

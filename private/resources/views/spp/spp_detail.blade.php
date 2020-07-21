@@ -242,7 +242,7 @@ Detail SPP
 		methods: {
 			fetchData() {
 				$.ajax({
-					url: '/spp_dok_hub/{{ $data_spp->id_spp }}',
+					url: "{{ url('/spp_dok_hub/'. $data_spp->id_spp) }}",
 					success(res) {
 						vm.dokHub = res.data
 					}
@@ -272,7 +272,7 @@ Detail SPP
 			formData.append('file_dokumen', file)
 
 			$.ajax({
-				url: '/upload_dokumen',
+				url: "{{ url('/upload_dokumen') }}",
 				method: 'post',
 				data: formData,
 				contentType: false,

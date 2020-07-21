@@ -9,12 +9,18 @@ use App\Exports\SppExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Helper;
 use PDF;
+use Artisan;
 
 /**
  * 
  */
 class SppController extends Controller
 {
+	public function __construct()
+	{
+		Artisan::call('view:clear');
+	}
+
 	public function cek_jarak($bapp, $terima)
 	{
 		if (!$bapp || !$terima) {
