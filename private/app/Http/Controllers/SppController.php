@@ -462,7 +462,8 @@ class SppController extends Controller
 		$file = $request->file('file_dokumen');
 		$rand = \rand(100000, 999999);
 		$filename = $rand .'-'. $file->getClientOriginalName();
-		$path = $file->storeAs('uploads', $filename);
+		$path = $file->move('./uploads', $filename);
+		$path = \substr($path, 2);
 
 		DB::table('tb_dok_hub')->insert([
 			'id_jenis_dok' => $req['id_jenis_dok'],
