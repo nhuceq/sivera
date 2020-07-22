@@ -177,9 +177,9 @@ Detail SPP
 						Edit Verifikasi Lanjutan
 					</button>
 
-					@elseif (Auth::user()->role == 'user_biasa')	 
+					@elseif(Auth::user()->role == 'user_biasa')	 
 					
-					<button type="button" class="btn btn-success float-left btn-sm">
+					<button type="button" class="btn btn-success float-left btn-sm btn-cetak">
 						Cetak
 					</button>
 
@@ -251,6 +251,22 @@ Detail SPP
 			uploadDokumen(id) {
 				$('#id_jenis_dok').val(id)
 				$('#file_dokumen').trigger('click')
+			},
+			url(str) {
+				let root = "{{ url('/') }}"
+				return root+str
+			},
+			printSpp() {
+				let check = this.jenisDok.find(x => x.is_required && !x.is_uploaded)
+				if (check) {
+					swal("Mohon Maaf,", "Silakan lengkapi dokumen sebelum mencetak SPP.", "warning")
+					.then((willDelete) => {
+						$('#kelengkapan_dokumen').modal('show')
+					})
+				}
+				else {
+					location.href= "{{ url('/routing_unit/'.$data_spp->id_spp) }}"
+				}
 			}
 		}
 	})
@@ -279,8 +295,16 @@ Detail SPP
 				processData: false,
 				success(res) {
 					vm.fetchData()
+					toastr.success('Dokumen berhasil diupload', 'Sukses!')
+				},
+				error(err) {
+					toastr.error('Terjadi kesalahan', 'Error!')
 				}
 			})
+		})
+
+		$('.btn-cetak').click(function(){
+			vm.printSpp()
 		})
 	})
 </script>

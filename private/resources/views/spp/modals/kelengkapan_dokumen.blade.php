@@ -9,6 +9,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
+				@if(Auth::user()->role == 'verifikator1' || Auth::user()->role == 'verifikator2')
 				<p class="alert alert-{{ $data_spp->tgl_terima ? 'success' : 'warning' }}">
 					Nomor SPP {{ $data_spp->nomor_spp }} 
 					@if($data_spp->tgl_terima)
@@ -17,6 +18,7 @@
 					belum mengirimkan dokumen fisik
 					@endif
 				</p>
+				@endif
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -33,10 +35,10 @@
 							<td>@{{ dok.jenis_dok }}</td>
 							<td style="white-space: nowrap;">
 								<button class="btn btn-sm btn-success" @click="uploadDokumen(dok.id)" v-show="isUserBiasa">Upload</button>
-								<a :href="'/'+dok.file" target="_blank" class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
+								<a :href="url('/') + dok.file" target="_blank" class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
 									<i class="fa fa-eye"></i>
 								</a>
-								<a :href="'/download_dokumen/'+dok.file" target="_blank" class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
+								<a :href="url('/download_dokumen/') + dok.file" target="_blank" class="btn btn-sm btn-info" :disabled="!dok.is_uploaded">
 									<i class="fa fa-download"></i>
 								</a>
 							</td>
@@ -46,7 +48,9 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-				<button type="Submit" class="btn btn-primary">Cetak</button>
+				@if(Auth::user()->role == 'user_biasa')
+				<button type="Submit" class="btn btn-primary btn-cetak">Cetak</button>
+				@endif
 			</div>
 		</form>
 	</div>

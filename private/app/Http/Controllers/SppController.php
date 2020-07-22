@@ -9,18 +9,12 @@ use App\Exports\SppExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Helper;
 use PDF;
-use Artisan;
 
 /**
  * 
  */
 class SppController extends Controller
 {
-	public function __construct()
-	{
-		Artisan::call('view:clear');
-	}
-
 	public function cek_jarak($bapp, $terima)
 	{
 		if (!$bapp || !$terima) {
@@ -349,7 +343,8 @@ class SppController extends Controller
 			'tgl_bapp' => $tgl_bapp,
 			'tgl_input' => date('y-m-d H:i:s'),
 			'kode_user_biasa' => $kode_user_biasa,
-			'id_bayar' => $data_spp['id_bayar']
+			'id_bayar' => $data_spp['id_bayar'],
+			'akun' => $data_spp['akun'],
 		];
 
 		$spp = DB::table('tb_spp') -> where ('nomor_spp', $nomor_spp ) -> first();
@@ -492,25 +487,38 @@ class SppController extends Controller
 
 	public function download_dokumen(Request $request, $file)
 	{
-		$path = storage_path('app/uploads/'.$file);
+		$path = './uploads/'.$file;
 		return response()->download($path);
 	}
 
-	public function routing_unit($id_spp)
+	public function routing_unit(Request $request, $id_spp)
 	{
-
 		$spp = DB::table('tb_spp')
 		->leftJoin('tb_bayar', 'tb_bayar.id', 'tb_spp.id_bayar')
 		->leftJoin('penanggung_jawab', 'penanggung_jawab.id', 'tb_spp.id_pj')
 		->where('tb_spp.id_spp', $id_spp)
 		->first();
 
-		$jenis_dok = DB::table('tb_jenis_dok')->where('id_bayar', $spp->id_bayar)->get();
+		$jenis_dok = Helper::toArray(DB::table('tb_jenis_dok')->where('id_bayar', $spp->id_bayar)->get());
+		$dok_hub = DB::table('tb_dok_hub')->where('id_spp', $spp->id_spp)->get();
 
-		$pdf = PDF::loadView('spp.routing_unit', [
+		foreach ($dok_hub as $hub) {
+			$dok_key = array_search($hub->id_jenis_dok, array_column($jenis_dok, 'id'));
+			$jenis_dok[$dok_key]['is_uploaded'] = true;
+			$jenis_dok[$dok_key]['file'] = $hub->file;
+		}
+
+		$jenis_dok = json_decode(json_encode($jenis_dok));
+		$data_view = [
 			'spp' => $spp,
 			'jenis_dok' => $jenis_dok,
-		]);
+		];
+
+		if ($request->has('view')) {
+			return view('spp.routing_unit', $data_view);
+		}
+
+		$pdf = PDF::loadView('spp.routing_unit', $data_view);
         return $pdf->download('Form-Pengajuan-SPP-'.$spp->nomor_spp.'.pdf');
 	}
 

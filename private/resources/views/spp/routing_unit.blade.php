@@ -5,7 +5,7 @@
 </head>
 <body>
 
-	<center><b>FORM PENGAJUAN TAGIHAN</b></center>
+	<h2 style="text-align:center">FORM PENGAJUAN TAGIHAN</b></h2>
 
 <table>
 <thead>
@@ -44,7 +44,7 @@
   <tr>
     <td>Akun</td>
     <td>:</td>
-    <td>Ini ga ada fieldnya</td>
+    <td>{{ $spp->akun }}</td>
   </tr>
    <tr>
     <td>Uraian Kegiatan</td>
@@ -58,7 +58,7 @@
 
   <br><br>
 
-<table border="1" width="100%" cellpadding="2">
+<table border="1" width="100%" cellpadding="2" cellspacing="0">
 <thead>
   <tr>
     <th rowspan="2" width="3%">No</th>
@@ -74,39 +74,27 @@
   </tr>
 </thead>
 <tbody>
+  @foreach($jenis_dok as $n => $dok)
   <tr>
-    <td></td>
-    <td></td>
+    <td style="text-align:center">{{ $n+1 }}</td>
+    <td>{{ $dok->jenis_dok }}</td>
     <td></td>
     <td></td>
     <td></td>
   </tr>
-
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-
-  <tr>
-    <td colspan="5"><br></td>
-   
-  </tr>
+  @endforeach
 </tbody>
 </table>
 
 <br>
-<table align="left">
-	<tr>
-		<td>Yang Mengajukan,</td>
+<br>
+<p>
+  Yang Mengajukan,
 		<br>
 		<br>
 		<br>
-		<td>Tampil Nama PJ</td>
-	</tr>
-</table>
-
+		<br>
+	{{ $spp->nama_pj }}
+</p>
 </body>
 </html>
