@@ -78,7 +78,7 @@
   <tr>
     <td style="text-align:center">{{ $n+1 }}</td>
     <td>{{ $dok->jenis_dok }}</td>
-    <td></td>
+    <td style="text-align:center">{!! isset($dok->is_uploaded) ? '&check;' : '' !!}</td>
     <td></td>
     <td></td>
   </tr>
